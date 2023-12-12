@@ -20,10 +20,25 @@ public struct ResponseFormat: Codable, Equatable {
     }
 }
 
+public enum ChatContentType: String, Codable, Equatable {
+    case text
+    case imageUrl = "image_url"
+}
+
+public struct ChatContentImageUrl: Codable, Equatable {
+    /// Must be a base64 encoded jpeg with the format: "data:image/jpeg;base64,{image}"
+    public let url: URL
+}
+
+public struct ChatContent: Codable, Equatable {
+    public let type: ChatContentType
+    public let text: String?
+}
+
 public struct Chat: Codable, Equatable {
     public let role: Role
     /// The contents of the message. `content` is required for all messages except assistant messages with function calls.
-    public let content: String?
+    public let content: [ChatContent]?
     /// The name of the author of this message. `name` is required if role is `function`, and it should be the name of the function whose response is in the `content`. May contain a-z, A-Z, 0-9, and underscores, with a maximum length of 64 characters.
     public let name: String?
     public let functionCall: ChatFunctionCall?
@@ -42,9 +57,23 @@ public struct Chat: Codable, Equatable {
         case functionCall = "function_call"
     }
     
-    public init(role: Role, content: String? = nil, name: String? = nil, functionCall: ChatFunctionCall? = nil) {
+    public init(role: Role, content: [ChatContent]? = nil, name: String? = nil, functionCall: ChatFunctionCall? = nil) {
         self.role = role
         self.content = content
+        self.name = name
+        self.functionCall = functionCall
+    }
+    
+    public init(role: Role, content: String? = nil, name: String? = nil, functionCall: ChatFunctionCall? = nil) {
+        self.role = role
+        self.content = [.init(type: .text, text: content)]
+        self.name = name
+        self.functionCall = functionCall
+    }
+    
+    public init(role: Role, name: String? = nil, functionCall: ChatFunctionCall? = nil) {
+        self.role = role
+        self.content = nil
         self.name = name
         self.functionCall = functionCall
     }
