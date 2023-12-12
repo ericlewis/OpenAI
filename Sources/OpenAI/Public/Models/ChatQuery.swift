@@ -37,12 +37,12 @@ public struct ChatContentImageUrl: Codable, Equatable {
 public struct ChatContent: Codable, Equatable {
     public let type: ChatContentType
     public let text: String?
-    public let imageUrl: ChatContentImageUrl?
+    public let image_url: ChatContentImageUrl?
     
     public init(type: ChatContentType, text: String? = nil, imageUrl: ChatContentImageUrl? = nil) {
         self.type = type
         self.text = text
-        self.imageUrl = imageUrl
+        self.image_url = imageUrl
     }
 }
 
