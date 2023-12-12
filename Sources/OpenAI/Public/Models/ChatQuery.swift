@@ -28,11 +28,20 @@ public enum ChatContentType: String, Codable, Equatable {
 public struct ChatContentImageUrl: Codable, Equatable {
     /// Must be a base64 encoded jpeg with the format: "data:image/jpeg;base64,{image}"
     public let url: URL
+    
+    public init(url: URL) {
+        self.url = url
+    }
 }
 
 public struct ChatContent: Codable, Equatable {
     public let type: ChatContentType
     public let text: String?
+    
+    public init(type: ChatContentType, text: String?) {
+        self.type = type
+        self.text = text
+    }
 }
 
 public struct Chat: Codable, Equatable {
